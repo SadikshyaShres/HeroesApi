@@ -1,5 +1,6 @@
 package np.com.softwarica.heroesapi;
 
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,9 +36,28 @@ public class AddHeroActivity extends AppCompatActivity implements View.OnClickLi
         etDesc=findViewById(R.id.etDesc);
         btnSave=findViewById(R.id.btnSave);
         imgProfile=findViewById(R.id.imgProfile);
+        loadFromURL();
 
         btnSave.setOnClickListener(this);
 
+    }
+
+    private void StrictMode(){
+        android.os.StrictMode.ThreadPolicy policy=
+                new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
+        android.os.StrictMode.setThreadPolicy(policy);
+
+    }
+    private  void loadFromURL(){
+        StrictMode();
+        try{
+            String imgURL="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/avengers-endgame-thor-chris-hemsworth-1555603082.jpg?crop=0.529xw:1.00xh;0.250xw,0&resize=480:*";
+            URL url=new URL(imgURL);
+            imgProfile.setImageBitmap(BitmapFactory.decodeStream((InputStream)url.getContent()));
+
+        }catch (IOException e){
+            Toast.makeText(this,"Error",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
